@@ -1,0 +1,139 @@
+Got it! Here's Paper 1's explanation again without tables, making it easy to copy.
+
+
+---
+
+Paper 1: "Latency-Aware Service Function Chain Placement in 5G Mobile Networks"
+
+1. Introduction
+
+This paper focuses on optimizing Service Function Chain (SFC) placement in 5G networks to minimize latency. It uses Integer Linear Programming (ILP) to determine the best placement for Virtualized Service Functions (VSFs) in a network while ensuring low end-to-end (E2E) latency.
+
+Key Objectives:
+
+1. Minimize latency by placing VNFs in the fastest possible location.
+
+
+2. Ensure optimal resource usage without overloading any network node.
+
+
+3. Guarantee QoS for real-time applications like AR/VR, gaming, and remote surgery.
+
+
+
+
+---
+
+2. Network Model
+
+The network consists of three types of nodes where VNFs can be placed:
+
+DU (Distributed Unit): Closest to users with the lowest latency but limited processing power.
+
+CU (Centralized Unit): Intermediate location balancing speed and computing resources.
+
+5GC (5G Core): Far from users with the highest computing power but also the highest latency.
+
+
+Each User Equipment (UE) sends an SFC request, which consists of multiple VNFs. Where these VNFs are placed affects both latency and network congestion.
+
+
+---
+
+3. ILP-Based Optimization Model
+
+ILP is used to find the best placement of VNFs that minimizes total end-to-end latency.
+
+Decision Variables:
+
+Define  if VNF  of user  is placed at node , otherwise 0.
+
+Objective Function (Minimize Latency):
+
+\min \sum_{u} \sum_{s} \sum_{n} L_{n} \cdot x_{u,s,n}
+
+Constraints:
+
+1. Each UE must be assigned to exactly one DU:
+
+
+
+\sum_{d} x_{u,d} = 1, \quad \forall u
+
+2. Each VNF must be placed exactly once:
+
+
+
+\sum_{n} x_{u,s,n} = 1, \quad \forall u, s
+
+3. Network Resource Constraints (CPU, Memory):
+
+
+
+\sum_{u} \sum_{s} x_{u,s,n} \cdot R_s \leq C_n, \quad \forall n
+
+These constraints ensure that each UE gets the required services without exceeding node capacities.
+
+
+---
+
+4. Numerical Example: Solving SFC Placement Using ILP
+
+Problem Setup:
+
+Two users (UE1, UE2) request SFCs:
+
+UE1 needs Firewall (FW) and Load Balancer (LB).
+
+UE2 needs Intrusion Detection System (IDS) and Video Optimizer (VO).
+
+
+Latency values for each node:
+
+DU latency = 1 ms
+
+CU latency = 3 ms
+
+5GC latency = 8 ms
+
+
+DU can hold only 1 VNF, CU can hold 2 VNFs, and 5GC can hold unlimited VNFs but adds higher latency.
+
+
+ILP Solution:
+
+1. Firewall (FW) is placed at DU → Latency = 1 ms.
+
+
+2. Load Balancer (LB) is placed at CU → Latency = 3 ms.
+
+
+3. Intrusion Detection System (IDS) is placed at CU → Latency = 3 ms.
+
+
+4. Video Optimizer (VO) is placed at 5GC → Latency = 8 ms.
+
+
+
+Total Latency Calculation:
+
+1 + 3 + 3 + 8 = 15 \text{ ms}
+
+ILP ensures that VNFs are placed as close to the users as possible to minimize latency.
+
+
+---
+
+5. Key Takeaways from Paper 1
+
+ILP finds the optimal SFC placement for minimizing latency.
+
+Placing VNFs at DUs provides the lowest latency, but resource constraints limit how many VNFs can be placed at the edge.
+
+ILP is computationally expensive, making it difficult to scale for large 5G networks.
+
+The model does not consider mobility—if a user moves, the ILP cannot efficiently reallocate VNFs without disruptions.
+
+
+
+--
